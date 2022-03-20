@@ -45,6 +45,7 @@ import org.apache.rocketmq.store.MessageExtBrokerInner;
 import org.apache.rocketmq.store.PutMessageResult;
 import org.apache.rocketmq.store.stats.BrokerStatsManager;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ReplyMessageProcessor extends AbstractSendMessageProcessor implements NettyRequestProcessor {
@@ -157,8 +158,8 @@ public class ReplyMessageProcessor extends AbstractSendMessageProcessor implemen
         final SendMessageRequestHeader requestHeader,
         final Message msg) {
         ReplyMessageRequestHeader replyMessageRequestHeader = new ReplyMessageRequestHeader();
-        replyMessageRequestHeader.setBornHost(ctx.channel().remoteAddress().toString());
-        replyMessageRequestHeader.setStoreHost(this.getStoreHost().toString());
+        replyMessageRequestHeader.setBornHost(((InetSocketAddress)(ctx.channel().remoteAddress())).getHostString());
+        replyMessageRequestHeader.setStoreHost(((InetSocketAddress)(this.getStoreHost())).getHostString());
         replyMessageRequestHeader.setStoreTimestamp(System.currentTimeMillis());
         replyMessageRequestHeader.setProducerGroup(requestHeader.getProducerGroup());
         replyMessageRequestHeader.setTopic(requestHeader.getTopic());
